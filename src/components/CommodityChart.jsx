@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useCommodityData } from "@/hooks/useCommodityData";
 
@@ -37,14 +37,36 @@ function formatXAxisLabel(dateStr, interval) {
 export default function CommodityChart() {
   const [activeFilter, setActiveFilter] = useState("monthly");
   const { data, isLoading, isError, error } = useCommodityData(activeFilter);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Memoize chart config to prevent unnecessary re-renders
   const chartOptions = useMemo(() => {
     if (!data) return {};
 
-    const categories = data.dates.map((d) =>
+    let rawCategories = data.dates.map((d) =>
       formatXAxisLabel(d, activeFilter)
     );
+
+    // On mobile screens, skip rendering alternate labels to prevent clumping
+    const categories = isMobile
+      ? rawCategories.map((cat, idx) => {
+          if (activeFilter === "daily") {
+            // Show every 5th day label on mobile (0, 5, 10, 15, 20, 25, 30)
+            return idx % 5 === 0 ? cat : "";
+          }
+          // Show every 6th month/year label on mobile (0, 6, 12, 18, 24)
+          return idx % 6 === 0 ? cat : "";
+        })
+      : rawCategories;
 
     return {
       chart: {
@@ -97,7 +119,7 @@ export default function CommodityChart() {
           rotate: -45,
           rotateAlways: true,
           maxHeight: 80,
-          hideOverlappingLabels: false,
+          hideOverlappingLabels: true,
           trim: false,
         },
         axisBorder: { show: true, color: "#E5E7EB" },
@@ -144,7 +166,7 @@ export default function CommodityChart() {
       },
       colors: ["#22D3EE"],
     };
-  }, [data, activeFilter]);
+  }, [data, activeFilter, isMobile]);
 
   const series = useMemo(() => {
     if (!data) return [];
