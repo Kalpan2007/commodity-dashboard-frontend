@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Algo Agritech Dashboard (Frontend)
 
-## Getting Started
+A modern, responsive dashboard to visualize commodity price index trends.
 
-First, run the development server:
+## Features
+- **Next.js (App Router):** Clean React framework configuration.
+- **ApexCharts:** Custom gradient area charts with -45 degree rotated category labels.
+- **React Query:** High-performance caching, state synchronization, loading spinners, and error state tracking.
+- **Tailwind CSS:** Fully responsive mobile-first UI with custom spacing.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Project Structure
+```
+frontend/
+├── src/
+│   ├── app/         # Next.js App Router pages and global layouts
+│   ├── components/  # Visual components (Navbar, CommodityChart, UsersTable, etc.)
+│   ├── hooks/       # Custom React Query fetching hook
+│   ├── lib/         # Axios API client configurations
+│   └── providers/   # Global QueryClientProvider wrapper
+├── .env.local       # Local environment variables file
+├── .env.local.example # Template environment configuration
+└── package.json     # Node scripts and package dependencies
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Setup & Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. **Configure Environment (`.env.local`):**
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. **Run Dev Server:**
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Build Production:**
+   ```bash
+   npm run build
+   ```
